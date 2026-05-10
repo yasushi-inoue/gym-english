@@ -119,8 +119,9 @@
 | 項目 | 内容 |
 |---|---|
 | 開発環境 | Claude Code（Windows） |
-| GitHub | **未着手** |
-| 他にやりたいこと | 社内向けHTMLマニュアル公開（別件） |
+| GitHub | **導入済み（2026-05-10）** — `yasushi-inoue/gym-english` で初公開 |
+| ジム英語アプリ公開URL | https://yasushi-inoue.github.io/gym-english/gym_english.html |
+| 他にやりたいこと | 社内向けHTMLマニュアル公開（別件、価格改定読み物ガイドv2から開始予定） |
 | マニュアル対象 | 100人以上、全社展開 |
 | アクセス場所 | 社内＋社外（自宅、外出先） |
 | 認証要件 | 手間が少ない方法が良い |
@@ -192,6 +193,12 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 - 既存のコード（Streamlitツール、PPTX生成パイプライン、`koga-polymer-sales-tools/` 等）のバックアップ・バージョン管理ができる
 - 現状ゼロなので事業継続リスク回避になる
 
+**進捗状況（2026-05-10時点）**：
+- ✅ Phase 1 完了：GitHubアカウント `yasushi-inoue` 作成、`gym-english` リポジトリでジム英語アプリの初プッシュ成功
+- ✅ Phase 2 完了：GitHub Pages 公開済み（URLは状況サマリー参照）
+- 未着手：Phase 3（Cloudflare Pages連携）、Phase 4（Access認証）
+- 次の候補：価格改定読み物ガイドの別Publicリポジトリ公開 / index.htmlリネームによる短URL化 / ジム英語アプリのCF Workers移植
+
 ---
 
 ## 📝 別チャット再開用テンプレート
@@ -223,13 +230,17 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 ## 💡 次のアクション候補
 
 ### 短期（判断不要、いつでも着手可）
-- [ ] GitHubアカウント作成（https://github.com/signup、5分）
+- [x] GitHubアカウント作成（2026-05-10完了、ユーザー名: `yasushi-inoue`）
+- [x] ジム英語アプリをGitHub Pagesで公開（2026-05-10完了）
+- [ ] `gym_english.html` → `index.html` リネームで短URL化
+- [ ] 価格改定読み物ガイドv2の別Publicリポジトリ公開（公開可な範囲に絞った社内マニュアル配信のテストケース）
 - [ ] 会社IT/情シスに社外SaaS利用方針を雑談ベースで確認
 
 ### 中期（社外SaaS方針確定後）
-- [ ] ジム英語アプリをGitHub Pagesで公開（練習台）
 - [ ] Cloudflareアカウント作成
-- [ ] 社内マニュアル配信環境の構築
+- [ ] CF Pages + CF Workers連携環境の構築（ジム英語アプリのロールプレイ機能復活が最初の動機）
+- [ ] CF Access での社内ドメイン認証（社内秘マニュアル配信が必要になった時）
+- [ ] CF D1/KV/R2 でのDB連携（利用履歴・コメント・通知が必要になった時）
 
 ### アプリ改善候補
 - [ ] 間隔反復学習（SRS）の導入：自己評価で次回表示間隔を調整
