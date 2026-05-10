@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gym English">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230a0a0a'/%3E%3Ctext x='90' y='115' font-size='100' text-anchor='middle' fill='%23f5d547'%3E💪%3C/text%3E%3C/svg%3E">
+<title>Gym English 💪</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #161616;
+    --surface: #1f1f1f;
+    --surface-2: #2a2a2a;
+    --accent: #f5d547;
+    --accent-2: #ff5e3a;
+    --text: #f5f5f5;
+    --text-dim: #888;
+    --border: #2e2e2e;
+    --success: #4ade80;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, rgba(245,213,71,0.08), transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(255,94,58,0.06), transparent 50%),
+      var(--bg);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .app { flex: 1; display: flex; flex-direction: column; position: relative; z-index: 2; min-height: 0; }
+
+  /* ===== Header ===== */
+  header {
+    padding: 14px 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .logo-mark { color: var(--text); }
+  .level-toggle {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .level-toggle button {
+    padding: 5px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: inherit;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .level-toggle button.active {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* ===== Tab Bar (bottom) ===== */
+  nav.tabs {
+    display: flex;
+    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  nav.tabs button {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border-top: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  nav.tabs button .ico { font-size: 22px; }
+  nav.tabs button.active {
+    color: var(--accent);
+    border-top-color: var(--accent);
+  }
+
+  /* ===== Views ===== */
+  main {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+  .view {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 20px 20px;
+    display: none;
+    flex-direction: column;
+  }
+  .view.active { display: flex; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ===== Home ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--accent) 0%, #f5b547 100%);
+    color: #000;
+    padding: 22px 22px 24px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .hero::before {
+    content: 'GYM';
+    position: absolute;
+    right: -20px;
+    bottom: -50px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: rgba(0,0,0,0.08);
+    line-height: 0.8;
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .hero p {
+    margin-top: 6px;
+    font-size: 13px;
+    opacity: 0.75;
+    position: relative;
+  }
+  .progress-card {
+    margin-top: 14px;
+    background: rgba(0,0,0,0.12);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 999px;
+    margin: 0 12px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #000;
+    border-radius: 999px;
+    transition: width 0.4s;
+  }
+
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .menu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.2s;
+    text-align: left;
+    color: var(--text);
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 110px;
+  }
+  .menu-card:active { transform: scale(0.97); }
+  .menu-card .ico { font-size: 28px; }
+  .menu-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .menu-card p { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+  .menu-card.roleplay h3 { color: var(--accent-2); }
+
+  .tip-section h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .daily-tip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .daily-tip .en { color: var(--text); font-weight: 500; }
+  .daily-tip .ja { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+
+  /* ===== Flashcards ===== */
+  .cards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .category-pills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .category-pills::-webkit-scrollbar { display: none; }
+  .pill {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .pill.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  .card-counter {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .flashcard-area {
+    flex: 1;
+    perspective: 1200px;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 280px;
+  }
+  .flashcard {
+    width: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .card-face.back { transform: rotateY(180deg); background: var(--bg-2); }
+  .card-cat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .card-en {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+    word-wrap: break-word;
+  }
+  .card-en.long { font-size: 26px; }
+  .card-pron {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .card-hint {
+    background: rgba(245,213,71,0.04);
+    border-left: 2px solid rgba(245,213,71,0.4);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #cfcfcf;
+  }
+  .card-hint .hint-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .card-hint .hint-emoji {
+    font-size: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .icon-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .icon-btn:active { transform: scale(0.95); }
+  .icon-btn.primary { background: var(--accent); color: #000; border-color: var(--accent); }
+  .icon-btn.success { background: var(--success); color: #000; border-color: var(--success); }
+  .icon-btn.mark.marked { background: var(--success); color: #000; border-color: var(--success); }
+
+  .card-ja {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .card-example {
+    background: rgba(245,213,71,0.06);
+    border-left: 3px solid var(--accent);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .card-example .en {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .card-example .ja {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .card-nav {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .nav-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-btn:active { transform: scale(0.97); }
+  .nav-btn.next { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  /* ===== Roleplay ===== */
+  .roleplay-intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .roleplay-intro h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--accent-2);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .roleplay-intro p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  .scenario-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 200px;
+  }
+  .msg {
+    max-width: 85%;
+    padding: 10px 13px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: msgIn 0.25s ease;
+  }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .msg.bot {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user {
+    background: var(--accent);
+    color: #000;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    font-weight: 500;
+  }
+  .msg .meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .msg.bot .ja {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    line-height: 1.5;
+    border-top: 1px dashed var(--border);
+    padding-top: 6px;
+  }
+  .msg-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .msg-mini-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .msg.user .msg-mini-btn {
+    background: rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.6);
+    border-color: rgba(0,0,0,0.15);
+  }
+
+  .typing {
+    display: flex;
+    gap: 4px;
+    padding: 10px 14px;
+    align-self: flex-start;
+    background: var(--surface);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+  }
+  .typing span {
+    width: 6px; height: 6px;
+    background: var(--text-dim);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce { 0%,60%,100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+
+  .chat-input-wrap {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .send-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 0 16px;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .send-btn:disabled { opacity: 0.4; }
+
+  .suggestion-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .chip {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    color: var(--text-dim);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .chip:active { background: var(--surface-2); }
+
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* hint footer */
+  .swipe-hint {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="logo"><span class="logo-mark">💪</span><span>GYM ENGLISH</span></div>
+    <div class="level-toggle" id="levelToggle">
+      <button class="active" data-level="beginner">初級</button>
+      <button data-level="intermediate">中級</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME VIEW -->
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <h1>Train hard.<br>Talk harder.</h1>
+        <p>ジムでの隙間時間に、英語をひと押し。</p>
+        <div class="progress-card">
+          <span>覚えた</span>
+          <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+          <span id="progressText">0/20</span>
+        </div>
+      </div>
+
+      <div class="home-grid">
+        <button class="menu-card" data-go="cards">
+          <div class="ico">📇</div>
+          <h3>FLASHCARDS</h3>
+          <p>20単語＋フレーズ<br>タップで意味を表示</p>
+        </button>
+        <button class="menu-card roleplay" data-go="roleplay">
+          <div class="ico">💬</div>
+          <h3>ROLEPLAY</h3>
+          <p>AIと雑談練習<br>ジム仲間との会話</p>
+        </button>
+      </div>
+
+      <div class="tip-section">
+        <h4>TODAY'S PHRASE</h4>
+        <div class="daily-tip" id="dailyTip">
+          <div class="en">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FLASHCARDS VIEW -->
+    <section class="view" id="view-cards">
+      <div class="category-pills" id="categoryPills">
+        <button class="pill active" data-cat="all">ALL</button>
+        <button class="pill" data-cat="equipment">器具</button>
+        <button class="pill" data-cat="action">動作</button>
+        <button class="pill" data-cat="body">部位</button>
+        <button class="pill" data-cat="phrase">会話</button>
+      </div>
+      <div class="card-counter" id="cardCounter">1 / 20</div>
+      <div class="flashcard-area">
+        <div class="flashcard" id="flashcard">
+          <div class="card-face front">
+            <div class="card-cat" id="cardCat">EQUIPMENT</div>
+            <div class="card-en" id="cardEn">treadmill</div>
+            <div class="card-pron" id="cardPron">/ˈtredmɪl/</div>
+            <div class="card-hint" id="cardHint">
+              <span class="hint-label">Think in English</span>
+              <span class="hint-emoji" id="cardHintEmoji">🏃</span><span id="cardHintText">A machine for running indoors.</span>
+            </div>
+            <div class="card-actions">
+              <button class="icon-btn primary" id="speakBtn">🔊 発音</button>
+              <button class="icon-btn mark" id="markBtn">☆ 覚えた</button>
+            </div>
+          </div>
+          <div class="card-face back">
+            <div class="card-cat">意味・例文</div>
+            <div class="card-ja" id="cardJa">ランニングマシン</div>
+            <div class="card-example">
+              <div class="en" id="cardExEn">I'm going to use the treadmill for 20 minutes.</div>
+              <div class="ja" id="cardExJa">トレッドミルを20分使うつもりだよ。</div>
+            </div>
+            <div class="card-actions">
+              <button class="icon-btn" id="speakExBtn">🔊 例文</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-nav">
+        <button class="nav-btn" id="prevBtn">← Prev</button>
+        <button class="nav-btn next" id="nextBtn">Next →</button>
+      </div>
+      <div class="swipe-hint">TAP CARD TO FLIP</div>
+    </section>
+
+    <!-- ROLEPLAY VIEW -->
+    <section class="view" id="view-roleplay">
+      <div class="roleplay-intro">
+        <h3>SMALL TALK AT THE GYM</h3>
+        <p>ジムで隣の人と雑談する場面です。AIがジム仲間として話しかけてきます。気軽に英語で返してみよう。</p>
+      </div>
+      <div class="scenario-pills">
+        <button class="pill active" data-sc="machine">マシン譲り合い</button>
+        <button class="pill" data-sc="form">フォームを褒める</button>
+        <button class="pill" data-sc="routine">ルーティンの話</button>
+        <button class="pill" data-sc="rest">休憩日の話</button>
+      </div>
+      <div class="chat-area" id="chatArea"></div>
+      <div class="suggestion-chips" id="suggestionChips"></div>
+      <div class="chat-input-wrap">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Type in English..." autocomplete="off" autocapitalize="sentences">
+        <button class="send-btn" id="sendBtn">SEND</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs">
+    <button class="active" data-tab="home"><span class="ico">🏠</span>HOME</button>
+    <button data-tab="cards"><span class="ico">📇</span>CARDS</button>
+    <button data-tab="roleplay"><span class="ico">💬</span>ROLEPLAY</button>
+  </nav>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============= DATA =============
+const VOCAB = {
+  beginner: [
+    // Equipment / 器具
+    { en: "treadmill", pron: "/ˈtredmɪl/", ja: "ランニングマシン", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏃", hint: "A machine for running or walking indoors.", exEn: "I'm going to use the treadmill for 20 minutes.", exJa: "トレッドミルを20分使うつもりだよ。" },
+    { en: "dumbbell", pron: "/ˈdʌmbel/", ja: "ダンベル", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "A short bar with weights on both ends. You hold one in each hand.", exEn: "Can you pass me that dumbbell?", exJa: "そのダンベル取ってくれる？" },
+    { en: "barbell", pron: "/ˈbɑːrbel/", ja: "バーベル", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️‍♂️", hint: "A long bar you load with heavy plates. Used for big lifts.", exEn: "I need to add more weight to the barbell.", exJa: "バーベルにもっと重りを足さないと。" },
+    { en: "bench press", pron: "/bentʃ pres/", ja: "ベンチプレス", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🛋️", hint: "Lying down on a bench and pushing a barbell up.", exEn: "Are you using the bench press?", exJa: "ベンチプレス使ってますか？" },
+    { en: "machine", pron: "/məˈʃiːn/", ja: "マシン", cat: "equipment", catLabel: "EQUIPMENT", emoji: "⚙️", hint: "Equipment with cables, pulleys, or fixed paths. Easier than free weights.", exEn: "How does this machine work?", exJa: "このマシンの使い方教えてもらえますか？" },
+    { en: "locker", pron: "/ˈlɑːkər/", ja: "ロッカー", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🔒", hint: "A small box where you keep your bag and clothes safe.", exEn: "Where are the lockers?", exJa: "ロッカーはどこですか？" },
+    // Action / 動作
+    { en: "work out", pron: "/wɜːrk aʊt/", ja: "運動する", cat: "action", catLabel: "ACTION", emoji: "💪", hint: "To exercise your body. The general word for training at the gym.", exEn: "I work out three times a week.", exJa: "週3回トレーニングしてるよ。" },
+    { en: "lift", pron: "/lɪft/", ja: "（重量を）上げる", cat: "action", catLabel: "ACTION", emoji: "⬆️", hint: "To pick up something heavy. Also a noun: 'a heavy lift'.", exEn: "How much can you lift?", exJa: "どれくらい上げられる？" },
+    { en: "stretch", pron: "/stretʃ/", ja: "ストレッチする", cat: "action", catLabel: "ACTION", emoji: "🧘", hint: "To slowly extend your muscles to make them flexible.", exEn: "I always stretch before lifting.", exJa: "リフト前にいつもストレッチするんだ。" },
+    { en: "warm up", pron: "/wɔːrm ʌp/", ja: "ウォームアップ", cat: "action", catLabel: "ACTION", emoji: "🔥", hint: "Light exercise at the start to get your body ready.", exEn: "Let me warm up first.", exJa: "まずウォームアップさせて。" },
+    { en: "cool down", pron: "/kuːl daʊn/", ja: "クールダウン", cat: "action", catLabel: "ACTION", emoji: "❄️", hint: "Easy movement at the end to bring your heart rate down.", exEn: "Don't forget to cool down after.", exJa: "終わったらクールダウンを忘れずに。" },
+    // Body / 部位
+    { en: "abs", pron: "/æbz/", ja: "腹筋", cat: "body", catLabel: "BODY", emoji: "🔥", hint: "The muscles on the front of your stomach.", exEn: "Today is abs day.", exJa: "今日は腹筋の日。" },
+    { en: "legs", pron: "/leɡz/", ja: "脚", cat: "body", catLabel: "BODY", emoji: "🦵", hint: "From your hips down to your feet. Squat day = leg day.", exEn: "I'm training legs today.", exJa: "今日は脚トレ。" },
+    // Phrase / 会話
+    { en: "Are you using this?", pron: "/ɑːr juː ˈjuːzɪŋ ðɪs/", ja: "これ使ってますか？", cat: "phrase", catLabel: "PHRASE", emoji: "👉", hint: "Point at a bench or machine. Ask if someone has it.", exEn: "Hey, are you using this bench?", exJa: "あの、このベンチ使ってますか？" },
+    { en: "How many sets left?", pron: "/haʊ ˈmeni sets left/", ja: "あと何セット？", cat: "phrase", catLabel: "PHRASE", emoji: "🔢", hint: "Ask how many more sets the person needs to finish.", exEn: "How many sets left? I can wait.", exJa: "あと何セット？待てるよ。" },
+    { en: "Mind if I join in?", pron: "/maɪnd ɪf aɪ dʒɔɪn ɪn/", ja: "一緒に使ってもいい？", cat: "phrase", catLabel: "PHRASE", emoji: "🤝", hint: "Polite way to ask if you can share the equipment.", exEn: "Mind if I join in between sets?", exJa: "セットの間に使わせてもらってもいい？" },
+    { en: "Good form!", pron: "/ɡʊd fɔːrm/", ja: "フォームいいね！", cat: "phrase", catLabel: "PHRASE", emoji: "👍", hint: "A compliment. Their lifting technique looks clean.", exEn: "Good form, man! Nice work.", exJa: "フォームいいね！素晴らしい。" },
+    { en: "Nice lift!", pron: "/naɪs lɪft/", ja: "いいリフト！", cat: "phrase", catLabel: "PHRASE", emoji: "🙌", hint: "Praise someone after they finish a heavy lift.", exEn: "Nice lift! That looked heavy.", exJa: "いいリフト！重そうだったね。" },
+    { en: "Can I work in?", pron: "/kæn aɪ wɜːrk ɪn/", ja: "間に入っていい？", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Ask to share equipment by alternating sets with someone.", exEn: "Can I work in while you rest?", exJa: "休憩の間に使ってもいい？" },
+    { en: "Let me know when you're done.", pron: "/let miː noʊ wen jʊr dʌn/", ja: "終わったら教えて", cat: "phrase", catLabel: "PHRASE", emoji: "👋", hint: "Tell someone you'll wait, and to let you know when finished.", exEn: "Let me know when you're done with it.", exJa: "終わったら教えてくれる？" }
+  ],
+  intermediate: [
+    { en: "spotter", pron: "/ˈspɑːtər/", ja: "補助者・スポッター", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🤝", hint: "A person who stands by to help if a lift gets too heavy.", exEn: "Could you be my spotter for a sec?", exJa: "ちょっとスポッターしてくれない？" },
+    { en: "rack", pron: "/ræk/", ja: "ラック（重りを置く台）", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🗄️", hint: "The frame or stand where weights and bars are stored.", exEn: "Don't forget to re-rack the weights.", exJa: "重りを戻すの忘れないでね。" },
+    { en: "free weights", pron: "/friː weɪts/", ja: "フリーウェイト", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "Dumbbells and barbells — weights without a fixed path.", exEn: "I prefer free weights over machines.", exJa: "マシンよりフリーウェイト派。" },
+    { en: "cable", pron: "/ˈkeɪbl/", ja: "ケーブルマシン", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🪢", hint: "A machine with a wire and pulley. Smooth, constant resistance.", exEn: "The cable station is over there.", exJa: "ケーブルマシンはあっちだよ。" },
+    // Action
+    { en: "superset", pron: "/ˈsuːpərset/", ja: "スーパーセット", cat: "action", catLabel: "ACTION", emoji: "⚡", hint: "Doing two exercises back-to-back with no rest in between.", exEn: "I'm doing supersets today.", exJa: "今日はスーパーセットでやってる。" },
+    { en: "rep / reps", pron: "/rep/", ja: "レップ（回数）", cat: "action", catLabel: "ACTION", emoji: "🔁", hint: "One repetition. '10 reps' = doing the movement 10 times.", exEn: "Just one more rep, you got this!", exJa: "あと1レップ、いけるよ！" },
+    { en: "PR (personal record)", pron: "/piː ɑːr/", ja: "自己ベスト", cat: "action", catLabel: "ACTION", emoji: "🏆", hint: "Your best ever lift. Beating it = hitting a new PR.", exEn: "I hit a new PR today!", exJa: "今日PR更新した！" },
+    { en: "bulk up", pron: "/bʌlk ʌp/", ja: "増量する", cat: "action", catLabel: "ACTION", emoji: "📈", hint: "Eating more and lifting heavy to gain muscle and size.", exEn: "I'm trying to bulk up this winter.", exJa: "今年の冬は増量する予定。" },
+    { en: "cut", pron: "/kʌt/", ja: "減量期", cat: "action", catLabel: "ACTION", emoji: "📉", hint: "Eating less to lose fat while keeping muscle.", exEn: "How's your cut going?", exJa: "減量どんな感じ？" },
+    { en: "plateau", pron: "/plæˈtoʊ/", ja: "停滞期", cat: "action", catLabel: "ACTION", emoji: "➖", hint: "When progress stops. You're stuck at the same weight or size.", exEn: "I'm hitting a plateau on bench.", exJa: "ベンチで停滞期に入ってる。" },
+    { en: "failure", pron: "/ˈfeɪljər/", ja: "限界まで（オールアウト）", cat: "action", catLabel: "ACTION", emoji: "💀", hint: "The point where you can't do another rep with good form.", exEn: "I always go to failure on the last set.", exJa: "最後のセットはいつも限界までやる。" },
+    // Body
+    { en: "delts", pron: "/delts/", ja: "三角筋（肩）", cat: "body", catLabel: "BODY", emoji: "🦾", hint: "Short for 'deltoids'. The round muscles on your shoulders.", exEn: "Lateral raises hit the side delts.", exJa: "サイドレイズは三角筋中部に効くよ。" },
+    { en: "lats", pron: "/læts/", ja: "広背筋", cat: "body", catLabel: "BODY", emoji: "🦅", hint: "The wide back muscles. Big lats give you a V-shape.", exEn: "Pull-ups are great for lats.", exJa: "懸垂は広背筋に効果的。" },
+    { en: "glutes", pron: "/ɡluːts/", ja: "お尻（大臀筋）", cat: "body", catLabel: "BODY", emoji: "🍑", hint: "Your butt muscles. Squats and hip thrusts hit them hard.", exEn: "Squats really activate the glutes.", exJa: "スクワットは大臀筋にしっかり効く。" },
+    { en: "core", pron: "/kɔːr/", ja: "体幹", cat: "body", catLabel: "BODY", emoji: "🎯", hint: "The muscles around your middle that stabilize everything.", exEn: "Strong core, strong everything.", exJa: "体幹が強ければ何でも強くなる。" },
+    // Phrase
+    { en: "Could you spot me?", pron: "/kʊd juː spɑːt miː/", ja: "補助してもらえる？", cat: "phrase", catLabel: "PHRASE", emoji: "🙏", hint: "Polite request: stand by and help if I can't lift it.", exEn: "Could you spot me on this last set?", exJa: "最後のセット補助してもらえる？" },
+    { en: "How many more sets do you have?", pron: "/haʊ ˈmeni mɔːr sets/", ja: "あと何セット残ってる？", cat: "phrase", catLabel: "PHRASE", emoji: "❓", hint: "Polite way to ask how long until they finish with the equipment.", exEn: "How many more sets do you have? No rush.", exJa: "あと何セット？急がなくていいよ。" },
+    { en: "I'll work in with you.", pron: "/aɪl wɜːrk ɪn wɪð juː/", ja: "間に入らせてもらうね", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Telling someone you'll alternate sets while they rest.", exEn: "Mind if I work in with you?", exJa: "間に入ってもいい？" },
+    { en: "What are you training today?", pron: "/wʌt ɑːr juː ˈtreɪnɪŋ/", ja: "今日は何の日（部位）？", cat: "phrase", catLabel: "PHRASE", emoji: "💭", hint: "Friendly small talk. Asking which body part they're working.", exEn: "What are you training today? Push or pull?", exJa: "今日は何トレ？プッシュ？プル？" },
+    { en: "How long have you been lifting?", pron: "/haʊ lɔːŋ hæv juː bɪn ˈlɪftɪŋ/", ja: "筋トレ何年やってる？", cat: "phrase", catLabel: "PHRASE", emoji: "📅", hint: "Asking about their training experience. Often a compliment.", exEn: "How long have you been lifting? You look strong.", exJa: "筋トレどれくらい？強そうだね。" }
+  ]
+};
+
+const SCENARIOS = {
+  machine: {
+    label: "マシン譲り合い",
+    opener: { en: "Hey man, are you still using this bench?", ja: "ねえ、このベンチまだ使ってる？" },
+    context: "You're at the gym. Another regular gym-goer wants to use the bench press / equipment you're near. Keep responses short, friendly, and natural — like a real gym conversation. Use simple gym vocabulary.",
+    suggestions: ["Yeah, two more sets.", "I'm done, go ahead.", "Want to work in?"]
+  },
+  form: {
+    label: "フォームを褒める",
+    opener: { en: "Nice form on those squats! How long have you been training?", ja: "スクワットのフォーム良いね！どれくらいトレーニングしてる？" },
+    context: "You're at the gym. Another gym-goer is friendly and complimenting the user's form. Keep responses short, friendly, encouraging — like real gym chat between regulars.",
+    suggestions: ["Thanks! About 2 years.", "Just started a few months ago.", "Thanks, you too!"]
+  },
+  routine: {
+    label: "ルーティンの話",
+    opener: { en: "What split are you running these days? I'm thinking about switching mine up.", ja: "最近どんな分割やってる？俺もちょっと変えようかと思って。" },
+    context: "You're at the gym. Another regular wants to chat about training splits and routines. Keep responses short and natural. Mention things like push/pull/legs, upper/lower, full body, etc.",
+    suggestions: ["I do push, pull, legs.", "Upper-lower, four days a week.", "Full body, three times a week."]
+  },
+  rest: {
+    label: "休憩日の話",
+    opener: { en: "I haven't seen you in a couple days — rest day yesterday?", ja: "ここ数日見かけなかったね、昨日休んだ？" },
+    context: "You're at the gym. Another regular noticed you weren't there and asks about rest days. Friendly, casual chat about recovery, schedules, etc.",
+    suggestions: ["Yeah, I take Sundays off.", "I was sore, needed a break.", "Nope, I was just busy."]
+  }
+};
+
+// ============= STATE =============
+let state = {
+  level: "beginner",
+  cardIdx: 0,
+  category: "all",
+  filtered: [],
+  marked: {},  // { "treadmill": true, ... }
+  scenario: "machine",
+  chatHistory: [],
+  isSending: false
+};
+
+// ============= STORAGE =============
+async function loadState() {
+  try {
+    const r = await window.storage.get("gym_eng_state");
+    if (r && r.value) {
+      const saved = JSON.parse(r.value);
+      state.level = saved.level || "beginner";
+      state.marked = saved.marked || {};
+    }
+  } catch (e) { /* first run */ }
+}
+async function saveState() {
+  try {
+    await window.storage.set("gym_eng_state", JSON.stringify({ level: state.level, marked: state.marked }));
+  } catch (e) { console.error(e); }
+}
+
+// ============= TOAST =============
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+// ============= TTS =============
+function speak(text) {
+  if (!window.speechSynthesis) { toast("音声非対応"); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.92;
+  u.pitch = 1.0;
+  // Try to pick an English voice
+  const voices = window.speechSynthesis.getVoices();
+  const enVoice = voices.find(v => v.lang.startsWith("en") && /Samantha|Alex|Karen|Google US/i.test(v.name)) || voices.find(v => v.lang.startsWith("en"));
+  if (enVoice) u.voice = enVoice;
+  window.speechSynthesis.speak(u);
+}
+// pre-load voices on iOS
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => {};
+  window.speechSynthesis.getVoices();
+}
+
+// ============= NAVIGATION =============
+function showView(name) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById("view-" + name).classList.add("active");
+  document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+  if (name === "cards") { applyFilter(); renderCard(); }
+  if (name === "roleplay" && state.chatHistory.length === 0) { startScenario(); }
+}
+
+document.querySelectorAll("nav.tabs button").forEach(b => {
+  b.addEventListener("click", () => showView(b.dataset.tab));
+});
+document.querySelectorAll(".menu-card").forEach(b => {
+  b.addEventListener("click", () => showView(b.dataset.go));
+});
+
+// ============= LEVEL TOGGLE =============
+document.querySelectorAll("#levelToggle button").forEach(b => {
+  b.addEventListener("click", () => {
+    if (state.level === b.dataset.level) return;
+    state.level = b.dataset.level;
+    document.querySelectorAll("#levelToggle button").forEach(x => x.classList.toggle("active", x === b));
+    state.cardIdx = 0;
+    applyFilter();
+    renderCard();
+    renderProgress();
+    renderDailyTip();
+    saveState();
+    toast(state.level === "beginner" ? "初級に切替" : "中級に切替");
+  });
+});
+
+// ============= FLASHCARDS =============
+function applyFilter() {
+  const all = VOCAB[state.level];
+  state.filtered = state.category === "all" ? all : all.filter(c => c.cat === state.category);
+  if (state.cardIdx >= state.filtered.length) state.cardIdx = 0;
+}
+
+function renderCard() {
+  const card = state.filtered[state.cardIdx];
+  if (!card) return;
+  document.getElementById("cardCat").textContent = card.catLabel;
+  const enEl = document.getElementById("cardEn");
+  enEl.textContent = card.en;
+  enEl.classList.toggle("long", card.en.length > 18);
+  document.getElementById("cardPron").textContent = card.pron;
+  document.getElementById("cardHintEmoji").textContent = card.emoji || "💭";
+  document.getElementById("cardHintText").textContent = card.hint || "";
+  document.getElementById("cardJa").textContent = card.ja;
+  document.getElementById("cardExEn").textContent = card.exEn;
+  document.getElementById("cardExJa").textContent = card.exJa;
+  document.getElementById("cardCounter").textContent = `${state.cardIdx + 1} / ${state.filtered.length}`;
+  // mark state
+  const markBtn = document.getElementById("markBtn");
+  if (state.marked[card.en]) {
+    markBtn.classList.add("marked");
+    markBtn.textContent = "★ 覚えた";
+  } else {
+    markBtn.classList.remove("marked");
+    markBtn.textContent = "☆ 覚えた";
+  }
+  // unflip
+  document.getElementById("flashcard").classList.remove("flipped");
+}
+
+document.getElementById("flashcard").addEventListener("click", (e) => {
+  if (e.target.closest(".icon-btn")) return;
+  document.getElementById("flashcard").classList.toggle("flipped");
+});
+
+document.getElementById("speakBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  speak(state.filtered[state.cardIdx].en);
+});
+document.getElementById("speakExBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  speak(state.filtered[state.cardIdx].exEn);
+});
+document.getElementById("markBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  const card = state.filtered[state.cardIdx];
+  state.marked[card.en] = !state.marked[card.en];
+  saveState();
+  renderCard();
+  renderProgress();
+  toast(state.marked[card.en] ? "覚えた！💪" : "もう一度復習");
+});
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+  state.cardIdx = (state.cardIdx - 1 + state.filtered.length) % state.filtered.length;
+  renderCard();
+});
+document.getElementById("nextBtn").addEventListener("click", () => {
+  state.cardIdx = (state.cardIdx + 1) % state.filtered.length;
+  renderCard();
+});
+
+// swipe support
+let touchStartX = 0;
+const flashcardArea = document.querySelector(".flashcard-area");
+flashcardArea.addEventListener("touchstart", e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+flashcardArea.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    if (dx < 0) document.getElementById("nextBtn").click();
+    else document.getElementById("prevBtn").click();
+  }
+}, { passive: true });
+
+document.querySelectorAll("#categoryPills .pill").forEach(p => {
+  p.addEventListener("click", () => {
+    document.querySelectorAll("#categoryPills .pill").forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
+    state.category = p.dataset.cat;
+    state.cardIdx = 0;
+    applyFilter();
+    renderCard();
+  });
+});
+
+// ============= PROGRESS =============
+function renderProgress() {
+  const total = VOCAB[state.level].length;
+  const learned = VOCAB[state.level].filter(c => state.marked[c.en]).length;
+  document.getElementById("progressText").textContent = `${learned}/${total}`;
+  document.getElementById("progressBar").style.width = `${(learned / total) * 100}%`;
+}
+
+function renderDailyTip() {
+  const all = VOCAB[state.level].filter(v => v.cat === "phrase");
+  const tip = all[Math.floor(Math.random() * all.length)];
+  const el = document.getElementById("dailyTip");
+  el.innerHTML = `<div class="en">"${tip.exEn}"</div><div class="ja">${tip.exJa}</div>`;
+}
+
+// ============= ROLEPLAY =============
+function startScenario() {
+  state.chatHistory = [];
+  const sc = SCENARIOS[state.scenario];
+  const chatArea = document.getElementById("chatArea");
+  chatArea.innerHTML = "";
+  addBotMessage(sc.opener.en, sc.opener.ja);
+  state.chatHistory.push({ role: "assistant", content: sc.opener.en });
+  renderSuggestions();
+}
+
+function renderSuggestions() {
+  const sc = SCENARIOS[state.scenario];
+  const chips = document.getElementById("suggestionChips");
+  chips.innerHTML = "";
+  sc.suggestions.forEach(s => {
+    const c = document.createElement("button");
+    c.className = "chip";
+    c.textContent = s;
+    c.addEventListener("click", () => {
+      document.getElementById("chatInput").value = s;
+      document.getElementById("chatInput").focus();
+    });
+    chips.appendChild(c);
+  });
+}
+
+function addBotMessage(en, ja) {
+  const chatArea = document.getElementById("chatArea");
+  const div = document.createElement("div");
+  div.className = "msg bot";
+  div.innerHTML = `
+    <div class="en">${escapeHtml(en)}</div>
+    ${ja ? `<div class="ja">🇯🇵 ${escapeHtml(ja)}</div>` : ''}
+    <div class="msg-actions">
+      <button class="msg-mini-btn speak-btn">🔊 発音</button>
+      ${ja ? '' : '<button class="msg-mini-btn translate-btn">🇯🇵 訳</button>'}
+    </div>
+  `;
+  div.querySelector(".speak-btn").addEventListener("click", () => speak(en));
+  const tBtn = div.querySelector(".translate-btn");
+  if (tBtn) {
+    tBtn.addEventListener("click", () => translateMessage(en, div, tBtn));
+  }
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const chatArea = document.getElementById("chatArea");
+  const div = document.createElement("div");
+  div.className = "msg user";
+  div.innerHTML = `<div>${escapeHtml(text)}</div>`;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function showTyping() {
+  const chatArea = document.getElementById("chatArea");
+  const t = document.createElement("div");
+  t.className = "typing";
+  t.id = "typingIndicator";
+  t.innerHTML = "<span></span><span></span><span></span>";
+  chatArea.appendChild(t);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+function hideTyping() {
+  const t = document.getElementById("typingIndicator");
+  if (t) t.remove();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+async function sendMessage() {
+  if (state.isSending) return;
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  addUserMessage(text);
+  state.chatHistory.push({ role: "user", content: text });
+  state.isSending = true;
+  document.getElementById("sendBtn").disabled = true;
+
+  showTyping();
+
+  try {
+    const sc = SCENARIOS[state.scenario];
+    const systemPrompt = `You are a friendly fellow gym-goer chatting with someone at the gym. Scenario: ${sc.context}
+
+Rules:
+- Reply in ENGLISH ONLY.
+- Keep replies SHORT (1-2 sentences max, like real gym small talk).
+- Use simple, natural gym vocabulary appropriate for ${state.level} level.
+- Be encouraging and friendly.
+- Sometimes ask a follow-up question to keep the conversation going.
+- Do NOT translate or explain — just reply naturally as a gym buddy would.`;
+
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        system: systemPrompt,
+        messages: state.chatHistory
+      })
+    });
+    const data = await resp.json();
+    hideTyping();
+
+    const reply = data.content?.find(b => b.type === "text")?.text?.trim() || "Sorry, what was that?";
+    state.chatHistory.push({ role: "assistant", content: reply });
+    addBotMessage(reply, null);
+  } catch (e) {
+    hideTyping();
+    addBotMessage("Hmm, couldn't hear you over the music. Try again?", "（ネットワークエラー — もう一度試してね）");
+    console.error(e);
+  } finally {
+    state.isSending = false;
+    document.getElementById("sendBtn").disabled = false;
+  }
+}
+
+async function translateMessage(en, container, btn) {
+  btn.disabled = true;
+  btn.textContent = "...";
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        messages: [{ role: "user", content: `Translate this gym conversation line into natural casual Japanese. Reply with ONLY the translation, no explanation:\n\n"${en}"` }]
+      })
+    });
+    const data = await resp.json();
+    const ja = data.content?.find(b => b.type === "text")?.text?.trim().replace(/^["「]|["」]$/g, "") || "(翻訳失敗)";
+    const jaDiv = document.createElement("div");
+    jaDiv.className = "ja";
+    jaDiv.textContent = "🇯🇵 " + ja;
+    container.querySelector(".msg-actions").insertAdjacentElement("beforebegin", jaDiv);
+    btn.remove();
+  } catch (e) {
+    btn.textContent = "🇯🇵 訳";
+    btn.disabled = false;
+    toast("翻訳失敗");
+  }
+}
+
+document.getElementById("sendBtn").addEventListener("click", sendMessage);
+document.getElementById("chatInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
+document.querySelectorAll(".scenario-pills .pill").forEach(p => {
+  p.addEventListener("click", () => {
+    document.querySelectorAll(".scenario-pills .pill").forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
+    state.scenario = p.dataset.sc;
+    startScenario();
+  });
+});
+
+// ============= INIT =============
+(async function init() {
+  await loadState();
+  // sync level toggle UI
+  document.querySelectorAll("#levelToggle button").forEach(b => {
+    b.classList.toggle("active", b.dataset.level === state.level);
+  });
+  applyFilter();
+  renderCard();
+  renderProgress();
+  renderDailyTip();
+})();
+</script>
+</body>
+</html>
