@@ -12,3 +12,6 @@
 
 # === Node.js（将来 npm でビルド系を導入する場合に備えて） ===
 node_modules/
+
+# === 外部AIへの指示書（Gemini等。アプリ本体のコードではないため除外） ===
+gemini-code-*.md
