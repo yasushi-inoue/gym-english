@@ -1,0 +1,23 @@
+# === VS Code 個人設定（環境依存） ===
+# Live Server のポート番号など、マシン依存の設定が勝手に保存される
+.vscode/
+
+# === 機密情報（APIキー、認証情報） ===
+# Cloudflare Workers移行時に Claude API キー等を入れる可能性に備えた予防策
+.env
+.env.local
+.env.*.local
+
+# === Windows OS の自動生成ファイル ===
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === macOS の自動生成ファイル（別端末から触る場合の予防） ===
+.DS_Store
+
+# === ログファイル ===
+*.log
+
+# === Node.js（将来 npm でビルド系を導入する場合に備えて） ===
+node_modules/
