@@ -118,9 +118,11 @@
 
 | 項目 | 内容 |
 |---|---|
-| 開発環境 | Claude Code（Windows） |
+| 開発環境 | Claude Code（Windows） + VS Code（Live Server拡張機能でローカルプレビュー） |
+| ブラウザ | Edge（Chromium系） — DevToolsデバイスツールバーでスマホ表示確認可 |
 | GitHub | **導入済み（2026-05-10）** — `yasushi-inoue/gym-english` で初公開 |
 | ジム英語アプリ公開URL | https://yasushi-inoue.github.io/gym-english/ （`index.html`にリネーム済み・2026-05-10） |
+| .gitignore構成 | グローバル（`~/.gitignore_global`、OS共通）+ リポジトリ固有（`.env`, `node_modules/`） |
 | 他にやりたいこと | 社内向けHTMLマニュアル公開（別件、価格改定読み物ガイドv2から開始予定） |
 | マニュアル対象 | 100人以上、全社展開 |
 | アクセス場所 | 社内＋社外（自宅、外出先） |
@@ -198,6 +200,8 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 - ✅ Phase 2 完了：GitHub Pages 公開済み（URLは状況サマリー参照）
 - 未着手：Phase 3（Cloudflare Pages連携）、Phase 4（Access認証）
 - ✅ index.htmlリネームによる短URL化（2026-05-10完了、コミット`174c241`）
+- ✅ 開発環境整備（2026-05-10）：VS Code Live Server拡張導入、Edge DevToolsでiPhoneプレビュー確認
+- ✅ .gitignore構成（2026-05-10）：グローバル（`C:\Users\KP000200\.gitignore_global`）でOS共通ルール、リポジトリ側で`.env`/`node_modules/`等の固有ルールを管理する2階層構成を確立
 - 次の候補：価格改定読み物ガイドの別Publicリポジトリ公開 / ジム英語アプリのCF Workers移植
 
 ---
@@ -234,6 +238,7 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 - [x] GitHubアカウント作成（2026-05-10完了、ユーザー名: `yasushi-inoue`）
 - [x] ジム英語アプリをGitHub Pagesで公開（2026-05-10完了）
 - [x] `gym_english.html` → `index.html` リネームで短URL化（2026-05-10完了、現URL: https://yasushi-inoue.github.io/gym-english/ ）
+- [x] `.gitignore` 整備とグローバル化（2026-05-10完了）
 - [ ] 価格改定読み物ガイドv2の別Publicリポジトリ公開（公開可な範囲に絞った社内マニュアル配信のテストケース）
 - [ ] 会社IT/情シスに社外SaaS利用方針を雑談ベースで確認
 
@@ -253,6 +258,8 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 ## 🔗 関連ファイル
 
 - `index.html` — メイン成果物（旧名 `gym_english.html`、2026-05-10にリネーム）
+- `.gitignore` — リポジトリ固有の除外ルール（`.env`, `node_modules/`）
+- `C:\Users\KP000200\.gitignore_global` — 全リポジトリ共通の除外ルール（OS自動生成ファイル、`.vscode/` 等）
 - このドキュメント — 議論の総括
 
 ---
