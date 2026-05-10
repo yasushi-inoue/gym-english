@@ -120,7 +120,7 @@
 |---|---|
 | 開発環境 | Claude Code（Windows） |
 | GitHub | **導入済み（2026-05-10）** — `yasushi-inoue/gym-english` で初公開 |
-| ジム英語アプリ公開URL | https://yasushi-inoue.github.io/gym-english/gym_english.html |
+| ジム英語アプリ公開URL | https://yasushi-inoue.github.io/gym-english/ （`index.html`にリネーム済み・2026-05-10） |
 | 他にやりたいこと | 社内向けHTMLマニュアル公開（別件、価格改定読み物ガイドv2から開始予定） |
 | マニュアル対象 | 100人以上、全社展開 |
 | アクセス場所 | 社内＋社外（自宅、外出先） |
@@ -197,7 +197,8 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 - ✅ Phase 1 完了：GitHubアカウント `yasushi-inoue` 作成、`gym-english` リポジトリでジム英語アプリの初プッシュ成功
 - ✅ Phase 2 完了：GitHub Pages 公開済み（URLは状況サマリー参照）
 - 未着手：Phase 3（Cloudflare Pages連携）、Phase 4（Access認証）
-- 次の候補：価格改定読み物ガイドの別Publicリポジトリ公開 / index.htmlリネームによる短URL化 / ジム英語アプリのCF Workers移植
+- ✅ index.htmlリネームによる短URL化（2026-05-10完了、コミット`174c241`）
+- 次の候補：価格改定読み物ガイドの別Publicリポジトリ公開 / ジム英語アプリのCF Workers移植
 
 ---
 
@@ -232,7 +233,7 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 ### 短期（判断不要、いつでも着手可）
 - [x] GitHubアカウント作成（2026-05-10完了、ユーザー名: `yasushi-inoue`）
 - [x] ジム英語アプリをGitHub Pagesで公開（2026-05-10完了）
-- [ ] `gym_english.html` → `index.html` リネームで短URL化
+- [x] `gym_english.html` → `index.html` リネームで短URL化（2026-05-10完了、現URL: https://yasushi-inoue.github.io/gym-english/ ）
 - [ ] 価格改定読み物ガイドv2の別Publicリポジトリ公開（公開可な範囲に絞った社内マニュアル配信のテストケース）
 - [ ] 会社IT/情シスに社外SaaS利用方針を雑談ベースで確認
 
@@ -251,7 +252,7 @@ Phase 4: Cloudflare Accessで認証ゲート設置（30分）
 
 ## 🔗 関連ファイル
 
-- `gym_english.html` — メイン成果物
+- `index.html` — メイン成果物（旧名 `gym_english.html`、2026-05-10にリネーム）
 - このドキュメント — 議論の総括
 
 ---
