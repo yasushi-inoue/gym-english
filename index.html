@@ -348,16 +348,26 @@
     color: var(--accent);
     margin-bottom: 12px;
   }
-  .card-en {
+  .card-chunks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    margin-bottom: 10px;
+  }
+  .card-chunk {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 38px;
-    line-height: 1.1;
+    font-size: 30px;
+    line-height: 1;
     letter-spacing: 0.02em;
     color: var(--text);
-    margin-bottom: 8px;
-    word-wrap: break-word;
+    background: rgba(245, 213, 71, 0.10);
+    border: 1px solid rgba(245, 213, 71, 0.35);
+    border-radius: 8px;
+    padding: 6px 11px 5px;
+    white-space: nowrap;
   }
-  .card-en.long { font-size: 26px; }
+  .card-chunks.long .card-chunk { font-size: 22px; padding: 5px 9px 4px; }
+  .card-chunks.xlong .card-chunk { font-size: 17px; padding: 4px 8px 3px; }
   .card-pron {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
@@ -461,6 +471,22 @@
     font-size: 12px;
     color: var(--text-dim);
     line-height: 1.5;
+  }
+  .example-chunks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 5px;
+    margin-bottom: 6px;
+  }
+  .example-chunk {
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--text);
+    background: rgba(245, 213, 71, 0.06);
+    border: 1px solid rgba(245, 213, 71, 0.22);
+    border-radius: 6px;
+    padding: 3px 7px;
+    white-space: nowrap;
   }
 
   .card-nav {
@@ -737,7 +763,7 @@
         <div class="flashcard" id="flashcard">
           <div class="card-face front">
             <div class="card-cat" id="cardCat">EQUIPMENT</div>
-            <div class="card-en" id="cardEn">treadmill</div>
+            <div class="card-chunks" id="cardEn"></div>
             <div class="card-pron" id="cardPron">/ˈtredmɪl/</div>
             <div class="card-hint" id="cardHint">
               <span class="hint-label">Think in English</span>
@@ -754,7 +780,7 @@
             <div class="card-cat">意味・例文</div>
             <div class="card-ja" id="cardJa">ランニングマシン</div>
             <div class="card-example">
-              <div class="en" id="cardExEn">I'm going to use the treadmill for 20 minutes.</div>
+              <div class="example-chunks" id="cardExEn"></div>
               <div class="ja" id="cardExJa">トレッドミルを20分使うつもりだよ。</div>
             </div>
             <div class="card-actions">
@@ -804,58 +830,59 @@
 <script>
 // ============= DATA =============
 // チャンク（意味の塊）ベース。単語ではなく「ジムで実際に口から出る一言」を学習単位にする。
+// chunks / exChunks: 意味の塊（口に出すリズムの単位）。表面・例文ともピル表示用。
 const VOCAB = {
   beginner: [
     // Equipment / 器具 (6)
-    { en: "Hop on the treadmill", pron: "/hɑːp ɑːn ðə ˈtredmɪl/", ja: "トレッドミルに乗る", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏃", hint: "Heading over to start running. 'Hop on' = jump on / get on.", exEn: "I'll hop on the treadmill for 20 minutes.", exJa: "トレッドミルに20分乗ろうかな。" },
-    { en: "Pass me that dumbbell", pron: "/pæs miː ðæt ˈdʌmbel/", ja: "そのダンベル取って", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "Asking the person nearest to hand you a dumbbell.", exEn: "Hey, could you pass me that dumbbell?", exJa: "ねえ、そのダンベル取ってもらえる？" },
-    { en: "Load up the barbell", pron: "/loʊd ʌp ðə ˈbɑːrbel/", ja: "バーベルに重りを足す", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️‍♂️", hint: "Putting weight plates on the bar before a heavy lift.", exEn: "Let me load up the barbell with another 20 kilos.", exJa: "バーベルにあと20kg足すね。" },
-    { en: "I'll use the bench press", pron: "/aɪl juːz ðə bentʃ pres/", ja: "ベンチプレス使うよ", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🛋️", hint: "Telling someone you're claiming the bench press.", exEn: "I'll use the bench press if no one else is.", exJa: "誰も使ってなければベンチプレス使うよ。" },
-    { en: "How does this machine work?", pron: "/haʊ dʌz ðɪs məˈʃiːn wɜːrk/", ja: "このマシンの使い方は？", cat: "equipment", catLabel: "EQUIPMENT", emoji: "⚙️", hint: "Asking a regular how to use a machine you don't know.", exEn: "Sorry, how does this machine work?", exJa: "すみません、このマシンの使い方教えてもらえますか？" },
-    { en: "Where are the lockers?", pron: "/wer ɑːr ðə ˈlɑːkərz/", ja: "ロッカーはどこ？", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🔒", hint: "Asking where to put your bag and clothes.", exEn: "Excuse me, where are the lockers?", exJa: "すみません、ロッカーはどこですか？" },
+    { en: "Hop on the treadmill", chunks: ["Hop on", "the treadmill"], pron: "/hɑːp ɑːn ðə ˈtredmɪl/", ja: "トレッドミルに乗る", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏃", hint: "Heading over to start running. 'Hop on' = jump on / get on.", exEn: "I'll hop on the treadmill for 20 minutes.", exChunks: ["I'll hop on", "the treadmill", "for 20 minutes."], exJa: "トレッドミルに20分乗ろうかな。" },
+    { en: "Pass me that dumbbell", chunks: ["Pass me", "that dumbbell"], pron: "/pæs miː ðæt ˈdʌmbel/", ja: "そのダンベル取って", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "Asking the person nearest to hand you a dumbbell.", exEn: "Hey, could you pass me that dumbbell?", exChunks: ["Hey,", "could you", "pass me", "that dumbbell?"], exJa: "ねえ、そのダンベル取ってもらえる？" },
+    { en: "Load up the barbell", chunks: ["Load up", "the barbell"], pron: "/loʊd ʌp ðə ˈbɑːrbel/", ja: "バーベルに重りを足す", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️‍♂️", hint: "Putting weight plates on the bar before a heavy lift.", exEn: "Let me load up the barbell with another 20 kilos.", exChunks: ["Let me", "load up", "the barbell", "with another", "20 kilos."], exJa: "バーベルにあと20kg足すね。" },
+    { en: "I'll use the bench press", chunks: ["I'll use", "the bench press"], pron: "/aɪl juːz ðə bentʃ pres/", ja: "ベンチプレス使うよ", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🛋️", hint: "Telling someone you're claiming the bench press.", exEn: "I'll use the bench press if no one else is.", exChunks: ["I'll use", "the bench press", "if no one", "else is."], exJa: "誰も使ってなければベンチプレス使うよ。" },
+    { en: "How does this machine work?", chunks: ["How does", "this machine", "work?"], pron: "/haʊ dʌz ðɪs məˈʃiːn wɜːrk/", ja: "このマシンの使い方は？", cat: "equipment", catLabel: "EQUIPMENT", emoji: "⚙️", hint: "Asking a regular how to use a machine you don't know.", exEn: "Sorry, how does this machine work?", exChunks: ["Sorry,", "how does", "this machine", "work?"], exJa: "すみません、このマシンの使い方教えてもらえますか？" },
+    { en: "Where are the lockers?", chunks: ["Where are", "the lockers?"], pron: "/wer ɑːr ðə ˈlɑːkərz/", ja: "ロッカーはどこ？", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🔒", hint: "Asking where to put your bag and clothes.", exEn: "Excuse me, where are the lockers?", exChunks: ["Excuse me,", "where are", "the lockers?"], exJa: "すみません、ロッカーはどこですか？" },
     // Action / 動作 (5)
-    { en: "I work out three times a week", pron: "/aɪ wɜːrk aʊt θriː taɪmz ə wiːk/", ja: "週3でトレーニングしてる", cat: "action", catLabel: "ACTION", emoji: "💪", hint: "Talking about your training frequency in casual chat.", exEn: "I work out three times a week, mostly upper body.", exJa: "週3トレ、ほぼ上半身中心。" },
-    { en: "How much do you lift?", pron: "/haʊ mʌtʃ duː juː lɪft/", ja: "どれくらい上げられる？", cat: "action", catLabel: "ACTION", emoji: "⬆️", hint: "Asking someone's max bench / squat / deadlift weight.", exEn: "How much do you lift on bench?", exJa: "ベンチどれくらい上げられる？" },
-    { en: "Stretch before you lift", pron: "/stretʃ bɪˈfɔːr juː lɪft/", ja: "リフト前にストレッチ", cat: "action", catLabel: "ACTION", emoji: "🧘", hint: "Reminding someone (or yourself) to warm up muscles first.", exEn: "Always stretch before you lift heavy.", exJa: "重い重量の前は必ずストレッチね。" },
-    { en: "Let me warm up first", pron: "/let miː wɔːrm ʌp fɜːrst/", ja: "まずウォームアップさせて", cat: "action", catLabel: "ACTION", emoji: "🔥", hint: "Saying you need light reps before the working sets.", exEn: "Let me warm up first, then I'll go heavy.", exJa: "まずウォームアップ、それから重いの。" },
-    { en: "Don't skip the cool-down", pron: "/doʊnt skɪp ðə kuːl daʊn/", ja: "クールダウン忘れずに", cat: "action", catLabel: "ACTION", emoji: "❄️", hint: "Telling someone to do light movement at the session's end.", exEn: "Don't skip the cool-down — your back will thank you.", exJa: "クールダウン忘れずに、腰が楽になるよ。" },
+    { en: "I work out three times a week", chunks: ["I work out", "three times", "a week"], pron: "/aɪ wɜːrk aʊt θriː taɪmz ə wiːk/", ja: "週3でトレーニングしてる", cat: "action", catLabel: "ACTION", emoji: "💪", hint: "Talking about your training frequency in casual chat.", exEn: "I work out three times a week, mostly upper body.", exChunks: ["I work out", "three times a week,", "mostly", "upper body."], exJa: "週3トレ、ほぼ上半身中心。" },
+    { en: "How much do you lift?", chunks: ["How much", "do you lift?"], pron: "/haʊ mʌtʃ duː juː lɪft/", ja: "どれくらい上げられる？", cat: "action", catLabel: "ACTION", emoji: "⬆️", hint: "Asking someone's max bench / squat / deadlift weight.", exEn: "How much do you lift on bench?", exChunks: ["How much", "do you lift", "on bench?"], exJa: "ベンチどれくらい上げられる？" },
+    { en: "Stretch before you lift", chunks: ["Stretch", "before you lift"], pron: "/stretʃ bɪˈfɔːr juː lɪft/", ja: "リフト前にストレッチ", cat: "action", catLabel: "ACTION", emoji: "🧘", hint: "Reminding someone (or yourself) to warm up muscles first.", exEn: "Always stretch before you lift heavy.", exChunks: ["Always stretch", "before you lift", "heavy."], exJa: "重い重量の前は必ずストレッチね。" },
+    { en: "Let me warm up first", chunks: ["Let me", "warm up", "first"], pron: "/let miː wɔːrm ʌp fɜːrst/", ja: "まずウォームアップさせて", cat: "action", catLabel: "ACTION", emoji: "🔥", hint: "Saying you need light reps before the working sets.", exEn: "Let me warm up first, then I'll go heavy.", exChunks: ["Let me", "warm up first,", "then I'll", "go heavy."], exJa: "まずウォームアップ、それから重いの。" },
+    { en: "Don't skip the cool-down", chunks: ["Don't skip", "the cool-down"], pron: "/doʊnt skɪp ðə kuːl daʊn/", ja: "クールダウン忘れずに", cat: "action", catLabel: "ACTION", emoji: "❄️", hint: "Telling someone to do light movement at the session's end.", exEn: "Don't skip the cool-down — your back will thank you.", exChunks: ["Don't skip", "the cool-down —", "your back", "will thank you."], exJa: "クールダウン忘れずに、腰が楽になるよ。" },
     // Body / 部位 (2)
-    { en: "Today is abs day", pron: "/təˈdeɪ ɪz æbz deɪ/", ja: "今日は腹筋の日", cat: "body", catLabel: "BODY", emoji: "🔥", hint: "Announcing which body part you're training today.", exEn: "Today is abs day, so it's gonna burn.", exJa: "今日は腹筋の日、燃えそう。" },
-    { en: "I'm training legs today", pron: "/aɪm ˈtreɪnɪŋ leɡz təˈdeɪ/", ja: "今日は脚トレ", cat: "body", catLabel: "BODY", emoji: "🦵", hint: "Casual answer to 'what are you doing today?' at the gym.", exEn: "I'm training legs today — squats and deadlifts.", exJa: "今日は脚、スクワットとデッドリフト。" },
+    { en: "Today is abs day", chunks: ["Today is", "abs day"], pron: "/təˈdeɪ ɪz æbz deɪ/", ja: "今日は腹筋の日", cat: "body", catLabel: "BODY", emoji: "🔥", hint: "Announcing which body part you're training today.", exEn: "Today is abs day, so it's gonna burn.", exChunks: ["Today is", "abs day,", "so it's", "gonna burn."], exJa: "今日は腹筋の日、燃えそう。" },
+    { en: "I'm training legs today", chunks: ["I'm training", "legs", "today"], pron: "/aɪm ˈtreɪnɪŋ leɡz təˈdeɪ/", ja: "今日は脚トレ", cat: "body", catLabel: "BODY", emoji: "🦵", hint: "Casual answer to 'what are you doing today?' at the gym.", exEn: "I'm training legs today — squats and deadlifts.", exChunks: ["I'm training", "legs today —", "squats", "and deadlifts."], exJa: "今日は脚、スクワットとデッドリフト。" },
     // Phrase / 会話 (7)
-    { en: "Are you using this?", pron: "/ɑːr juː ˈjuːzɪŋ ðɪs/", ja: "これ使ってる？", cat: "phrase", catLabel: "PHRASE", emoji: "👉", hint: "Pointing at a bench or machine, asking if it's free.", exEn: "Hey, are you using this bench?", exJa: "あの、このベンチ使ってますか？" },
-    { en: "How many sets left?", pron: "/haʊ ˈmeni sets left/", ja: "あと何セット？", cat: "phrase", catLabel: "PHRASE", emoji: "🔢", hint: "Polite way to ask how soon the equipment is free.", exEn: "How many sets left? I can wait.", exJa: "あと何セット？待てるよ。" },
-    { en: "Mind if I work in?", pron: "/maɪnd ɪf aɪ wɜːrk ɪn/", ja: "間に入っていい？", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Asking to share equipment by alternating sets.", exEn: "Mind if I work in between your sets?", exJa: "セットの間に使わせてもらってもいい？" },
-    { en: "Good form, man!", pron: "/ɡʊd fɔːrm mæn/", ja: "フォームいいね！", cat: "phrase", catLabel: "PHRASE", emoji: "👍", hint: "Compliment after watching a clean lift.", exEn: "Good form, man! Really clean reps.", exJa: "フォームいいね！キレイなレップだね。" },
-    { en: "Nice lift!", pron: "/naɪs lɪft/", ja: "いいリフト！", cat: "phrase", catLabel: "PHRASE", emoji: "🙌", hint: "Praise after someone finishes a heavy set.", exEn: "Nice lift! That looked heavy.", exJa: "いいリフト！重そうだったね。" },
-    { en: "Take your time", pron: "/teɪk jʊr taɪm/", ja: "ごゆっくり", cat: "phrase", catLabel: "PHRASE", emoji: "⏳", hint: "Telling someone there's no rush — you'll wait happily.", exEn: "No worries, take your time.", exJa: "急がなくていいよ、ごゆっくり。" },
-    { en: "Let me know when you're done", pron: "/let miː noʊ wen jʊr dʌn/", ja: "終わったら教えて", cat: "phrase", catLabel: "PHRASE", emoji: "👋", hint: "Telling someone you're waiting and they should ping you.", exEn: "Let me know when you're done with it, no rush.", exJa: "終わったら教えて、急がなくていいから。" }
+    { en: "Are you using this?", chunks: ["Are you", "using this?"], pron: "/ɑːr juː ˈjuːzɪŋ ðɪs/", ja: "これ使ってる？", cat: "phrase", catLabel: "PHRASE", emoji: "👉", hint: "Pointing at a bench or machine, asking if it's free.", exEn: "Hey, are you using this bench?", exChunks: ["Hey,", "are you", "using this bench?"], exJa: "あの、このベンチ使ってますか？" },
+    { en: "How many sets left?", chunks: ["How many", "sets left?"], pron: "/haʊ ˈmeni sets left/", ja: "あと何セット？", cat: "phrase", catLabel: "PHRASE", emoji: "🔢", hint: "Polite way to ask how soon the equipment is free.", exEn: "How many sets left? I can wait.", exChunks: ["How many", "sets left?", "I can wait."], exJa: "あと何セット？待てるよ。" },
+    { en: "Mind if I work in?", chunks: ["Mind if", "I work in?"], pron: "/maɪnd ɪf aɪ wɜːrk ɪn/", ja: "間に入っていい？", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Asking to share equipment by alternating sets.", exEn: "Mind if I work in between your sets?", exChunks: ["Mind if", "I work in", "between your sets?"], exJa: "セットの間に使わせてもらってもいい？" },
+    { en: "Good form, man!", chunks: ["Good form,", "man!"], pron: "/ɡʊd fɔːrm mæn/", ja: "フォームいいね！", cat: "phrase", catLabel: "PHRASE", emoji: "👍", hint: "Compliment after watching a clean lift.", exEn: "Good form, man! Really clean reps.", exChunks: ["Good form,", "man!", "Really clean", "reps."], exJa: "フォームいいね！キレイなレップだね。" },
+    { en: "Nice lift!", chunks: ["Nice lift!"], pron: "/naɪs lɪft/", ja: "いいリフト！", cat: "phrase", catLabel: "PHRASE", emoji: "🙌", hint: "Praise after someone finishes a heavy set.", exEn: "Nice lift! That looked heavy.", exChunks: ["Nice lift!", "That looked", "heavy."], exJa: "いいリフト！重そうだったね。" },
+    { en: "Take your time", chunks: ["Take your time"], pron: "/teɪk jʊr taɪm/", ja: "ごゆっくり", cat: "phrase", catLabel: "PHRASE", emoji: "⏳", hint: "Telling someone there's no rush — you'll wait happily.", exEn: "No worries, take your time.", exChunks: ["No worries,", "take your time."], exJa: "急がなくていいよ、ごゆっくり。" },
+    { en: "Let me know when you're done", chunks: ["Let me know", "when you're done"], pron: "/let miː noʊ wen jʊr dʌn/", ja: "終わったら教えて", cat: "phrase", catLabel: "PHRASE", emoji: "👋", hint: "Telling someone you're waiting and they should ping you.", exEn: "Let me know when you're done with it, no rush.", exChunks: ["Let me know", "when you're done", "with it,", "no rush."], exJa: "終わったら教えて、急がなくていいから。" }
   ],
   intermediate: [
     // Equipment (4)
-    { en: "I need a spotter", pron: "/aɪ niːd ə ˈspɑːtər/", ja: "補助者が必要", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🤝", hint: "About to lift heavy and want someone to safety-watch.", exEn: "I need a spotter for my last set.", exJa: "最後のセット、補助者ほしい。" },
-    { en: "Re-rack the weights", pron: "/riː ræk ðə weɪts/", ja: "重りを戻す", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🗄️", hint: "Putting plates and dumbbells back where they belong.", exEn: "Always re-rack the weights when you're done.", exJa: "終わったら必ず重りを戻してね。" },
-    { en: "I prefer free weights", pron: "/aɪ prɪˈfɜːr friː weɪts/", ja: "フリーウェイト派", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "Saying you like dumbbells/barbells more than machines.", exEn: "I prefer free weights — more activation.", exJa: "フリーウェイト派、活性化が違うから。" },
-    { en: "The cable station is over there", pron: "/ðə ˈkeɪbl ˈsteɪʃn ɪz ˈoʊvər ðer/", ja: "ケーブルマシンはあっち", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🪢", hint: "Pointing someone to where the cable machines are.", exEn: "The cable station is over there, by the mirror.", exJa: "ケーブルマシンはあっち、鏡の横。" },
+    { en: "I need a spotter", chunks: ["I need", "a spotter"], pron: "/aɪ niːd ə ˈspɑːtər/", ja: "補助者が必要", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🤝", hint: "About to lift heavy and want someone to safety-watch.", exEn: "I need a spotter for my last set.", exChunks: ["I need", "a spotter", "for my last set."], exJa: "最後のセット、補助者ほしい。" },
+    { en: "Re-rack the weights", chunks: ["Re-rack", "the weights"], pron: "/riː ræk ðə weɪts/", ja: "重りを戻す", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🗄️", hint: "Putting plates and dumbbells back where they belong.", exEn: "Always re-rack the weights when you're done.", exChunks: ["Always", "re-rack", "the weights", "when you're done."], exJa: "終わったら必ず重りを戻してね。" },
+    { en: "I prefer free weights", chunks: ["I prefer", "free weights"], pron: "/aɪ prɪˈfɜːr friː weɪts/", ja: "フリーウェイト派", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🏋️", hint: "Saying you like dumbbells/barbells more than machines.", exEn: "I prefer free weights — more activation.", exChunks: ["I prefer", "free weights —", "more activation."], exJa: "フリーウェイト派、活性化が違うから。" },
+    { en: "The cable station is over there", chunks: ["The cable station", "is over there"], pron: "/ðə ˈkeɪbl ˈsteɪʃn ɪz ˈoʊvər ðer/", ja: "ケーブルマシンはあっち", cat: "equipment", catLabel: "EQUIPMENT", emoji: "🪢", hint: "Pointing someone to where the cable machines are.", exEn: "The cable station is over there, by the mirror.", exChunks: ["The cable station", "is over there,", "by the mirror."], exJa: "ケーブルマシンはあっち、鏡の横。" },
     // Action (7)
-    { en: "I'm doing supersets", pron: "/aɪm ˈduːɪŋ ˈsuːpərsets/", ja: "スーパーセットやってる", cat: "action", catLabel: "ACTION", emoji: "⚡", hint: "Two exercises back-to-back, no rest. Saves time.", exEn: "I'm doing supersets today — chest and back.", exJa: "今日はスーパーセット、胸と背中。" },
-    { en: "Just one more rep", pron: "/dʒʌst wʌn mɔːr rep/", ja: "あと1レップ", cat: "action", catLabel: "ACTION", emoji: "🔁", hint: "Encouraging yourself or a friend at the end of a hard set.", exEn: "Come on, just one more rep — you got this!", exJa: "いけ、あと1レップ、いけるよ！" },
-    { en: "I hit a new PR", pron: "/aɪ hɪt ə njuː piː ɑːr/", ja: "PR更新した", cat: "action", catLabel: "ACTION", emoji: "🏆", hint: "PR = personal record. Best ever lift on a movement.", exEn: "I hit a new PR on bench today!", exJa: "今日ベンチでPR更新した！" },
-    { en: "I'm trying to bulk up", pron: "/aɪm ˈtraɪɪŋ tə bʌlk ʌp/", ja: "増量中", cat: "action", catLabel: "ACTION", emoji: "📈", hint: "Eating extra and lifting heavy to add muscle.", exEn: "I'm trying to bulk up this winter.", exJa: "今年の冬は増量するつもり。" },
-    { en: "I'm on a cut", pron: "/aɪm ɑːn ə kʌt/", ja: "減量中", cat: "action", catLabel: "ACTION", emoji: "📉", hint: "Eating less to lose fat while keeping muscle.", exEn: "I'm on a cut till summer.", exJa: "夏まで減量中。" },
-    { en: "I'm hitting a plateau", pron: "/aɪm ˈhɪtɪŋ ə plæˈtoʊ/", ja: "停滞期に入ってる", cat: "action", catLabel: "ACTION", emoji: "➖", hint: "Progress has stalled — same weight or size for weeks.", exEn: "I'm hitting a plateau on bench, can't break 100 kg.", exJa: "ベンチで停滞中、100kg超えない。" },
-    { en: "Go to failure", pron: "/ɡoʊ tə ˈfeɪljər/", ja: "限界までやる", cat: "action", catLabel: "ACTION", emoji: "💀", hint: "Push until you literally can't do another rep with form.", exEn: "Last set, go to failure!", exJa: "最後のセット、限界まで！" },
+    { en: "I'm doing supersets", chunks: ["I'm doing", "supersets"], pron: "/aɪm ˈduːɪŋ ˈsuːpərsets/", ja: "スーパーセットやってる", cat: "action", catLabel: "ACTION", emoji: "⚡", hint: "Two exercises back-to-back, no rest. Saves time.", exEn: "I'm doing supersets today — chest and back.", exChunks: ["I'm doing", "supersets today —", "chest and back."], exJa: "今日はスーパーセット、胸と背中。" },
+    { en: "Just one more rep", chunks: ["Just one more", "rep"], pron: "/dʒʌst wʌn mɔːr rep/", ja: "あと1レップ", cat: "action", catLabel: "ACTION", emoji: "🔁", hint: "Encouraging yourself or a friend at the end of a hard set.", exEn: "Come on, just one more rep — you got this!", exChunks: ["Come on,", "just one more rep —", "you got this!"], exJa: "いけ、あと1レップ、いけるよ！" },
+    { en: "I hit a new PR", chunks: ["I hit", "a new PR"], pron: "/aɪ hɪt ə njuː piː ɑːr/", ja: "PR更新した", cat: "action", catLabel: "ACTION", emoji: "🏆", hint: "PR = personal record. Best ever lift on a movement.", exEn: "I hit a new PR on bench today!", exChunks: ["I hit", "a new PR", "on bench", "today!"], exJa: "今日ベンチでPR更新した！" },
+    { en: "I'm trying to bulk up", chunks: ["I'm trying to", "bulk up"], pron: "/aɪm ˈtraɪɪŋ tə bʌlk ʌp/", ja: "増量中", cat: "action", catLabel: "ACTION", emoji: "📈", hint: "Eating extra and lifting heavy to add muscle.", exEn: "I'm trying to bulk up this winter.", exChunks: ["I'm trying to", "bulk up", "this winter."], exJa: "今年の冬は増量するつもり。" },
+    { en: "I'm on a cut", chunks: ["I'm on", "a cut"], pron: "/aɪm ɑːn ə kʌt/", ja: "減量中", cat: "action", catLabel: "ACTION", emoji: "📉", hint: "Eating less to lose fat while keeping muscle.", exEn: "I'm on a cut till summer.", exChunks: ["I'm on", "a cut", "till summer."], exJa: "夏まで減量中。" },
+    { en: "I'm hitting a plateau", chunks: ["I'm hitting", "a plateau"], pron: "/aɪm ˈhɪtɪŋ ə plæˈtoʊ/", ja: "停滞期に入ってる", cat: "action", catLabel: "ACTION", emoji: "➖", hint: "Progress has stalled — same weight or size for weeks.", exEn: "I'm hitting a plateau on bench, can't break 100 kg.", exChunks: ["I'm hitting", "a plateau", "on bench,", "can't break", "100 kg."], exJa: "ベンチで停滞中、100kg超えない。" },
+    { en: "Go to failure", chunks: ["Go to failure"], pron: "/ɡoʊ tə ˈfeɪljər/", ja: "限界までやる", cat: "action", catLabel: "ACTION", emoji: "💀", hint: "Push until you literally can't do another rep with form.", exEn: "Last set, go to failure!", exChunks: ["Last set,", "go to failure!"], exJa: "最後のセット、限界まで！" },
     // Body (4)
-    { en: "Hit the side delts", pron: "/hɪt ðə saɪd delts/", ja: "三角筋中部に効かす", cat: "body", catLabel: "BODY", emoji: "🦾", hint: "Targeting the side of the shoulders for width.", exEn: "Lateral raises hit the side delts perfectly.", exJa: "サイドレイズは三角筋中部にバッチリ効くよ。" },
-    { en: "Pull-ups for lats", pron: "/pʊl ʌps fɔːr læts/", ja: "懸垂で広背筋", cat: "body", catLabel: "BODY", emoji: "🦅", hint: "Pull-ups are the gold-standard lat builder.", exEn: "Pull-ups for lats — nothing beats them.", exJa: "広背筋には懸垂、これに勝るものなし。" },
-    { en: "Squats activate the glutes", pron: "/skwɑːts ˈæktɪveɪt ðə ɡluːts/", ja: "スクワットは大臀筋に効く", cat: "body", catLabel: "BODY", emoji: "🍑", hint: "Deep squats fire up the butt muscles.", exEn: "Deep squats really activate the glutes.", exJa: "深いスクワットは大臀筋にしっかり効く。" },
-    { en: "Strong core, strong everything", pron: "/strɔːŋ kɔːr strɔːŋ ˈevriθɪŋ/", ja: "体幹が強ければ何でも強い", cat: "body", catLabel: "BODY", emoji: "🎯", hint: "Mantra: every other lift depends on core stability.", exEn: "Don't skip core work — strong core, strong everything.", exJa: "体幹サボるな、体幹が強ければ全部強い。" },
+    { en: "Hit the side delts", chunks: ["Hit", "the side delts"], pron: "/hɪt ðə saɪd delts/", ja: "三角筋中部に効かす", cat: "body", catLabel: "BODY", emoji: "🦾", hint: "Targeting the side of the shoulders for width.", exEn: "Lateral raises hit the side delts perfectly.", exChunks: ["Lateral raises", "hit", "the side delts", "perfectly."], exJa: "サイドレイズは三角筋中部にバッチリ効くよ。" },
+    { en: "Pull-ups for lats", chunks: ["Pull-ups", "for lats"], pron: "/pʊl ʌps fɔːr læts/", ja: "懸垂で広背筋", cat: "body", catLabel: "BODY", emoji: "🦅", hint: "Pull-ups are the gold-standard lat builder.", exEn: "Pull-ups for lats — nothing beats them.", exChunks: ["Pull-ups", "for lats —", "nothing beats them."], exJa: "広背筋には懸垂、これに勝るものなし。" },
+    { en: "Squats activate the glutes", chunks: ["Squats", "activate", "the glutes"], pron: "/skwɑːts ˈæktɪveɪt ðə ɡluːts/", ja: "スクワットは大臀筋に効く", cat: "body", catLabel: "BODY", emoji: "🍑", hint: "Deep squats fire up the butt muscles.", exEn: "Deep squats really activate the glutes.", exChunks: ["Deep squats", "really activate", "the glutes."], exJa: "深いスクワットは大臀筋にしっかり効く。" },
+    { en: "Strong core, strong everything", chunks: ["Strong core,", "strong everything"], pron: "/strɔːŋ kɔːr strɔːŋ ˈevriθɪŋ/", ja: "体幹が強ければ何でも強い", cat: "body", catLabel: "BODY", emoji: "🎯", hint: "Mantra: every other lift depends on core stability.", exEn: "Don't skip core work — strong core, strong everything.", exChunks: ["Don't skip", "core work —", "strong core,", "strong everything."], exJa: "体幹サボるな、体幹が強ければ全部強い。" },
     // Phrase (5)
-    { en: "Could you spot me?", pron: "/kʊd juː spɑːt miː/", ja: "補助してもらえる？", cat: "phrase", catLabel: "PHRASE", emoji: "🙏", hint: "Polite request: stand by and help if I can't lift it.", exEn: "Could you spot me on this last set?", exJa: "最後のセット補助してもらえる？" },
-    { en: "How many more sets do you have?", pron: "/haʊ ˈmeni mɔːr sets duː juː hæv/", ja: "あと何セット残ってる？", cat: "phrase", catLabel: "PHRASE", emoji: "❓", hint: "Polite way to ask how long until equipment is free.", exEn: "How many more sets do you have? No rush.", exJa: "あと何セット残ってる？急がなくていいよ。" },
-    { en: "I'll work in with you", pron: "/aɪl wɜːrk ɪn wɪð juː/", ja: "間に入らせてもらうね", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Telling someone you'll alternate sets while they rest.", exEn: "Mind if I work in with you?", exJa: "間に入らせてもらってもいい？" },
-    { en: "What are you training today?", pron: "/wʌt ɑːr juː ˈtreɪnɪŋ təˈdeɪ/", ja: "今日は何の日（部位）？", cat: "phrase", catLabel: "PHRASE", emoji: "💭", hint: "Friendly small talk — which body part are you working?", exEn: "What are you training today? Push or pull?", exJa: "今日は何トレ？プッシュ？プル？" },
-    { en: "How long have you been lifting?", pron: "/haʊ lɔːŋ hæv juː bɪn ˈlɪftɪŋ/", ja: "筋トレ何年やってる？", cat: "phrase", catLabel: "PHRASE", emoji: "📅", hint: "Asking about training experience — usually a compliment.", exEn: "How long have you been lifting? You look strong.", exJa: "筋トレ何年？強そうだね。" }
+    { en: "Could you spot me?", chunks: ["Could you", "spot me?"], pron: "/kʊd juː spɑːt miː/", ja: "補助してもらえる？", cat: "phrase", catLabel: "PHRASE", emoji: "🙏", hint: "Polite request: stand by and help if I can't lift it.", exEn: "Could you spot me on this last set?", exChunks: ["Could you", "spot me", "on this", "last set?"], exJa: "最後のセット補助してもらえる？" },
+    { en: "How many more sets do you have?", chunks: ["How many more sets", "do you have?"], pron: "/haʊ ˈmeni mɔːr sets duː juː hæv/", ja: "あと何セット残ってる？", cat: "phrase", catLabel: "PHRASE", emoji: "❓", hint: "Polite way to ask how long until equipment is free.", exEn: "How many more sets do you have? No rush.", exChunks: ["How many more sets", "do you have?", "No rush."], exJa: "あと何セット残ってる？急がなくていいよ。" },
+    { en: "I'll work in with you", chunks: ["I'll work in", "with you"], pron: "/aɪl wɜːrk ɪn wɪð juː/", ja: "間に入らせてもらうね", cat: "phrase", catLabel: "PHRASE", emoji: "🔄", hint: "Telling someone you'll alternate sets while they rest.", exEn: "Mind if I work in with you?", exChunks: ["Mind if", "I work in", "with you?"], exJa: "間に入らせてもらってもいい？" },
+    { en: "What are you training today?", chunks: ["What are you", "training today?"], pron: "/wʌt ɑːr juː ˈtreɪnɪŋ təˈdeɪ/", ja: "今日は何の日（部位）？", cat: "phrase", catLabel: "PHRASE", emoji: "💭", hint: "Friendly small talk — which body part are you working?", exEn: "What are you training today? Push or pull?", exChunks: ["What are you", "training today?", "Push or pull?"], exJa: "今日は何トレ？プッシュ？プル？" },
+    { en: "How long have you been lifting?", chunks: ["How long", "have you been", "lifting?"], pron: "/haʊ lɔːŋ hæv juː bɪn ˈlɪftɪŋ/", ja: "筋トレ何年やってる？", cat: "phrase", catLabel: "PHRASE", emoji: "📅", hint: "Asking about training experience — usually a compliment.", exEn: "How long have you been lifting? You look strong.", exChunks: ["How long", "have you been", "lifting?", "You look", "strong."], exJa: "筋トレ何年？強そうだね。" }
   ]
 };
 
@@ -1089,13 +1116,30 @@ function renderCard() {
   abortShadowing(); // カードが変わったらシャドーイングを止める
   document.getElementById("cardCat").textContent = card.catLabel;
   const enEl = document.getElementById("cardEn");
-  enEl.textContent = card.en;
-  enEl.classList.toggle("long", card.en.length > 18);
+  enEl.innerHTML = "";
+  const chunks = Array.isArray(card.chunks) && card.chunks.length ? card.chunks : [card.en];
+  chunks.forEach(c => {
+    const span = document.createElement("span");
+    span.className = "card-chunk";
+    span.textContent = c;
+    enEl.appendChild(span);
+  });
+  enEl.classList.remove("long", "xlong");
+  if (card.en.length > 26) enEl.classList.add("xlong");
+  else if (card.en.length > 16) enEl.classList.add("long");
   document.getElementById("cardPron").textContent = card.pron;
   document.getElementById("cardHintEmoji").textContent = card.emoji || "💭";
   document.getElementById("cardHintText").textContent = card.hint || "";
   document.getElementById("cardJa").textContent = card.ja;
-  document.getElementById("cardExEn").textContent = card.exEn;
+  const exEnEl = document.getElementById("cardExEn");
+  exEnEl.innerHTML = "";
+  const exChunks = Array.isArray(card.exChunks) && card.exChunks.length ? card.exChunks : [card.exEn];
+  exChunks.forEach(c => {
+    const span = document.createElement("span");
+    span.className = "example-chunk";
+    span.textContent = c;
+    exEnEl.appendChild(span);
+  });
   document.getElementById("cardExJa").textContent = card.exJa;
   document.getElementById("cardCounter").textContent = `${state.cardIdx + 1} / ${state.filtered.length}`;
   // mark state
