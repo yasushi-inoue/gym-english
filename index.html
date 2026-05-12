@@ -317,7 +317,7 @@
     display: flex;
     align-items: stretch;
     justify-content: center;
-    min-height: 280px;
+    min-height: 460px;
   }
   .flashcard {
     width: 100%;
@@ -335,19 +335,50 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 22px 20px;
+    padding: 18px 18px;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+  .card-face.back {
+    transform: rotateY(180deg);
+    background: var(--bg-2);
     justify-content: center;
   }
-  .card-face.back { transform: rotateY(180deg); background: var(--bg-2); }
   .card-cat {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 11px;
     letter-spacing: 0.2em;
     color: var(--accent);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
+  .card-image {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(245,213,71,0.06), rgba(255,94,58,0.06));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-image.empty img { display: none; }
+  .card-image.empty::after {
+    content: attr(data-emoji);
+    font-size: 56px;
+    opacity: 0.35;
+  }
+  .card-image.hidden { display: none; }
   .card-chunks {
     display: flex;
     flex-wrap: wrap;
@@ -763,6 +794,9 @@
         <div class="flashcard" id="flashcard">
           <div class="card-face front">
             <div class="card-cat" id="cardCat">EQUIPMENT</div>
+            <div class="card-image empty" id="cardImage" data-emoji="💪">
+              <img id="cardImageImg" alt="" loading="lazy">
+            </div>
             <div class="card-chunks" id="cardEn"></div>
             <div class="card-pron" id="cardPron">/ˈtredmɪl/</div>
             <div class="card-hint" id="cardHint">
@@ -1110,11 +1144,33 @@ function applyFilter() {
   if (state.cardIdx >= state.filtered.length) state.cardIdx = 0;
 }
 
+// 英文を画像ファイル名用のスラッグに変換（tools/extract-vocab.mjs の slugify と同ロジック）
+function slugifyEn(en) {
+  return en
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .substring(0, 60);
+}
+
 function renderCard() {
   const card = state.filtered[state.cardIdx];
   if (!card) return;
   abortShadowing(); // カードが変わったらシャドーイングを止める
   document.getElementById("cardCat").textContent = card.catLabel;
+
+  // カード画像（あれば表示、なければ絵文字プレースホルダー）
+  const imgWrap = document.getElementById("cardImage");
+  const imgEl = document.getElementById("cardImageImg");
+  imgWrap.dataset.emoji = card.emoji || "💪";
+  imgWrap.classList.add("empty");
+  imgEl.removeAttribute("src");
+  imgEl.onload = () => imgWrap.classList.remove("empty");
+  imgEl.onerror = () => imgWrap.classList.add("empty");
+  imgEl.src = `images/cards/${slugifyEn(card.en)}.webp`;
+
   const enEl = document.getElementById("cardEn");
   enEl.innerHTML = "";
   const chunks = Array.isArray(card.chunks) && card.chunks.length ? card.chunks : [card.en];

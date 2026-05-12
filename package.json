@@ -1,0 +1,17 @@
+{
+  "name": "gym-english",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gym English flashcard app — image generation pipeline (Phase 2).",
+  "scripts": {
+    "gen:characters": "node tools/gen-characters.mjs",
+    "gen:cards": "node tools/gen-card-images.mjs",
+    "gen:cards:limit": "node tools/gen-card-images.mjs --limit 3"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "sharp": "^0.33.5"
+  }
+}
