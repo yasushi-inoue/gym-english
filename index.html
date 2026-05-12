@@ -42,7 +42,8 @@
       radial-gradient(ellipse at top, rgba(245,213,71,0.08), transparent 50%),
       radial-gradient(ellipse at bottom, rgba(255,94,58,0.06), transparent 50%),
       var(--bg);
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    /* safe-area の bottom は nav.tabs 側で吸収するので、body 側は入れない（二重カウント防止） */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -147,7 +148,7 @@
     inset: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 16px 20px 20px;
+    padding: 20px 20px 16px;
     display: none;
     flex-direction: column;
   }
@@ -284,12 +285,12 @@
   .category-pills::-webkit-scrollbar { display: none; }
   .pill {
     flex-shrink: 0;
-    padding: 6px 14px;
+    padding: 7px 14px;
     background: var(--surface);
     border: 1px solid var(--border);
     color: var(--text-dim);
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     font-family: inherit;
