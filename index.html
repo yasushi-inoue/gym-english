@@ -317,7 +317,7 @@
     display: flex;
     align-items: stretch;
     justify-content: center;
-    min-height: 460px;
+    min-height: 440px;
   }
   .flashcard {
     width: 100%;
@@ -335,7 +335,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 18px;
-    padding: 18px 18px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -345,20 +345,22 @@
     transform: rotateY(180deg);
     background: var(--bg-2);
     justify-content: center;
+    padding: 22px 20px;
   }
   .card-cat {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 11px;
     letter-spacing: 0.2em;
     color: var(--accent);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
   .card-image {
     width: 100%;
-    aspect-ratio: 3 / 2;
-    border-radius: 12px;
+    aspect-ratio: 16 / 9;
+    max-height: 200px;
+    border-radius: 10px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     background: linear-gradient(135deg, rgba(245,213,71,0.06), rgba(255,94,58,0.06));
     border: 1px solid var(--border);
     display: flex;
@@ -375,44 +377,44 @@
   .card-image.empty img { display: none; }
   .card-image.empty::after {
     content: attr(data-emoji);
-    font-size: 56px;
+    font-size: 48px;
     opacity: 0.35;
   }
   .card-image.hidden { display: none; }
   .card-chunks {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px 8px;
-    margin-bottom: 10px;
+    gap: 5px 6px;
+    margin-bottom: 6px;
   }
   .card-chunk {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 30px;
+    font-size: 26px;
     line-height: 1;
     letter-spacing: 0.02em;
     color: var(--text);
     background: rgba(245, 213, 71, 0.10);
     border: 1px solid rgba(245, 213, 71, 0.35);
-    border-radius: 8px;
-    padding: 6px 11px 5px;
+    border-radius: 7px;
+    padding: 5px 10px 4px;
     white-space: nowrap;
   }
-  .card-chunks.long .card-chunk { font-size: 22px; padding: 5px 9px 4px; }
-  .card-chunks.xlong .card-chunk { font-size: 17px; padding: 4px 8px 3px; }
+  .card-chunks.long .card-chunk { font-size: 20px; padding: 4px 8px 3px; }
+  .card-chunks.xlong .card-chunk { font-size: 16px; padding: 3px 7px 2px; }
   .card-pron {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
-    margin-bottom: 14px;
+    margin-bottom: 8px;
   }
   .card-hint {
     background: rgba(245,213,71,0.04);
     border-left: 2px solid rgba(245,213,71,0.4);
-    padding: 10px 12px;
+    padding: 7px 10px;
     border-radius: 6px;
-    margin-bottom: 12px;
-    font-size: 13px;
-    line-height: 1.55;
+    margin-bottom: 8px;
+    font-size: 12px;
+    line-height: 1.5;
     color: #cfcfcf;
   }
   .card-hint .hint-label {
@@ -421,32 +423,32 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     color: var(--text-dim);
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     text-transform: uppercase;
   }
   .card-hint .hint-emoji {
-    font-size: 18px;
-    margin-right: 6px;
+    font-size: 16px;
+    margin-right: 5px;
     vertical-align: middle;
   }
   .card-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     margin-top: auto;
   }
   .icon-btn {
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 9px 14px;
+    padding: 8px 12px;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     font-family: inherit;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     transition: all 0.2s;
   }
   .icon-btn:active { transform: scale(0.95); }
@@ -795,7 +797,7 @@
           <div class="card-face front">
             <div class="card-cat" id="cardCat">EQUIPMENT</div>
             <div class="card-image empty" id="cardImage" data-emoji="💪">
-              <img id="cardImageImg" alt="" loading="lazy">
+              <img id="cardImageImg" alt="">
             </div>
             <div class="card-chunks" id="cardEn"></div>
             <div class="card-pron" id="cardPron">/ˈtredmɪl/</div>

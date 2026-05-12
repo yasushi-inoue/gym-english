@@ -24,9 +24,9 @@ export const CHARACTERS = [
     id: "joe",
     name: "Coach Joe",
     description:
-      "A friendly experienced fitness coach in his late 40s with light skin, short salt-and-pepper hair, a neatly trimmed gray-and-brown beard, and crinkly kind eyes. Solid stocky build. Wears a warm gray athletic polo shirt and dark olive-green shorts. A whistle on a lanyard around his neck.",
+      "A fresh, friendly young athletic coach in his early 30s with light skin, short neat black hair (clean style), a clean-shaven face, and a bright confident smile. Solid sturdy build, broad-shouldered and visibly strong (gym coach physique). Wears a clean fitted light-blue short-sleeve athletic t-shirt and dark charcoal shorts. A simple silver whistle on a navy lanyard around his neck.",
     portraitPrompt:
-      "Full-body character reference sheet, standing pose, facing forward, neutral background. Character: a friendly experienced fitness coach in his late 40s with light skin, short salt-and-pepper hair, a neatly trimmed gray-and-brown beard, warm crinkly smile and kind eyes. Solid stocky build (not fat, not muscular — sturdy). Wears a warm gray short-sleeve athletic polo shirt and dark olive-green knee-length shorts. A simple silver whistle hanging on a black lanyard around his neck. Normal cartoon hands at his sides, dark gray sneakers.",
+      "Full-body character reference sheet, standing pose, facing forward, neutral background. Character: a fresh and friendly young athletic coach in his early 30s with light skin, short neat black hair (clean modern style, slightly tousled on top, NOT salt-and-pepper, NOT gray), a completely clean-shaven face (absolutely NO beard, NO mustache, NO stubble), bright confident warm smile. Solid sturdy build: broad-shouldered, thick chest and arms, visibly strong (a gym coach physique — substantial, NOT slim, NOT lean). Wears a clean fitted light-blue short-sleeve athletic t-shirt with a small ribbed crew neck, and dark charcoal-gray knee-length athletic shorts. A simple silver whistle hanging on a navy-blue lanyard around his neck. Normal cartoon hands at his sides, clean white sneakers.",
   },
 ];
 

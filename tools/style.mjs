@@ -23,7 +23,7 @@ CRITICAL: The image must contain ZERO text. No letters, no numbers, no labels, n
 export const CHARACTER_REFERENCE_DESC = `The attached reference images show our 3 consistent gym-buddy mascot characters:
 1. Marcus — a young man with warm brown skin, short curly black hair, big confident smile, orange sleeveless tank top, dark gray shorts, optional thin yellow sweatband
 2. Aya — a young woman with light tan skin, long black hair in a high ponytail, bright cheerful smile, light teal-blue sports tank, dark navy leggings
-3. Coach Joe — a stocky man in his late 40s with light skin, short salt-and-pepper hair, neat gray-and-brown beard, kind smile, warm gray athletic polo, olive shorts, silver whistle on a black lanyard
+3. Coach Joe — a fresh young athletic coach in his early 30s with light skin, short neat black hair, completely clean-shaven face (no beard, no stubble), bright friendly smile, solid sturdy broad-shouldered gym-coach build, light-blue fitted athletic t-shirt, dark charcoal shorts, silver whistle on a navy lanyard
 
 CRITICAL: Reproduce these EXACT three characters with consistent facial features, hair, body proportions, and outfits across every illustration. Treat them as recurring cast members — viewers should immediately recognize the same person from card to card. Match their skin tones, hair, and clothing colors precisely as shown in the references.`;
 
@@ -65,7 +65,7 @@ Context / meaning: ${card.hint}
 
 Show the character(s) in a gym setting actually doing or saying this phrase, with body language and facial expression that matches the situation. Include relevant gym equipment or environment to make the scene clearly readable at a glance. The mood should feel friendly, encouraging, and lightly energetic — like a positive social moment between gym regulars.
 
-Composition: 3:2 horizontal aspect ratio, character(s) prominent in the foreground, gym environment in the background. Frame from roughly mid-thigh up if a single character; wider framing if two characters are interacting.
+Composition: 16:9 horizontal aspect ratio, character(s) prominent in the foreground, gym environment in the background. Frame from roughly chest-up if a single character (the head and shoulders should be clearly visible); wider framing showing both characters if two characters are interacting.
 
 Remember: absolutely no text anywhere in the image. No letters, numbers, labels, brand logos, or signs.`;
 }

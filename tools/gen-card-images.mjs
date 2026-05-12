@@ -70,7 +70,7 @@ async function generateScene(ai, card, characterIds, outPath) {
     model: MODEL,
     config: {
       responseModalities: ["IMAGE", "TEXT"],
-      imageConfig: { imageSize: "1K", aspectRatio: "3:2" },
+      imageConfig: { imageSize: "1K", aspectRatio: "16:9" },
     },
     contents: [{ role: "user", parts: [...refImages, { text: prompt }] }],
   });
@@ -81,9 +81,9 @@ async function generateScene(ai, card, characterIds, outPath) {
   for (const part of parts) {
     if (part.inlineData) {
       const pngBuffer = Buffer.from(part.inlineData.data, "base64");
-      // WebP に変換して保存（PNG比で1/5〜1/10）
+      // WebP に変換して保存（PNG比で1/5〜1/10）。16:9 にリサイズ。
       await sharp(pngBuffer)
-        .resize(900, 600, { fit: "cover" })
+        .resize(960, 540, { fit: "cover" })
         .webp({ quality: 82 })
         .toFile(outPath);
       const stat = fs.statSync(outPath);
