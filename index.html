@@ -276,15 +276,15 @@
   }
   .category-pills {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
-    overflow-x: auto;
     padding-top: 4px;
     padding-bottom: 6px;
     margin-top: 4px;
     margin-bottom: 12px;
-    scrollbar-width: none;
+    /* iOS Safari は overflow-x: auto を指定すると縦もクリップする既知バグがあるため、
+       横スクロールは使わずに flex-wrap で折り返す方式に変更。ピルは5個固定。 */
   }
-  .category-pills::-webkit-scrollbar { display: none; }
   .pill {
     flex-shrink: 0;
     padding: 7px 14px;
